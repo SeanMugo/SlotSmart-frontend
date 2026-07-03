@@ -1,7 +1,13 @@
+import AuthLayout from "../components/auth/AuthLayout";
+import LoginForm from "../components/auth/LoginForm";
+
 export default function Login() {
   return (
-    <div>
-      <h1>Login Page</h1>
-    </div>
+    <AuthLayout
+      title="Welcome Back"
+      subtitle="Sign in to your SlotSmart account."
+    >
+      <LoginForm />
+    </AuthLayout>
   );
 }
