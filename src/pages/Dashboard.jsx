@@ -1,20 +1,13 @@
-import useAuth from "../hooks/useAuth";
+import DashboardHeader from "../components/dashboard/DashboardHeader";
+import StatsCards from "../components/dashboard/StatsCards";
 
 export default function Dashboard() {
-  const { user } = useAuth();
-
   return (
-    <div className="min-h-screen bg-slate-100 p-8">
-      <div className="mx-auto max-w-6xl rounded-2xl bg-white p-8 shadow">
+    <div className="min-h-screen bg-slate-50">
+      <div className="mx-auto max-w-7xl px-8 py-10">
+        <DashboardHeader />
 
-        <h1 className="text-3xl font-bold text-slate-800">
-          Dashboard
-        </h1>
-
-        <p className="mt-2 text-slate-500">
-          Welcome back{user ? `, ${user.username}` : ""}.
-        </p>
-
+        <StatsCards />
       </div>
     </div>
   );
