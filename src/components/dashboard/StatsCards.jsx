@@ -1,19 +1,27 @@
+import useDashboard from "../../hooks/useDashboard";
+
 export default function StatsCards() {
+  const {
+    availableSlots,
+    walletBalance,
+    loading,
+  } = useDashboard();
+
   const stats = [
     {
       title: "Available Slots",
-      value: "24",
+      value: loading ? "..." : availableSlots,
       color: "text-emerald-600",
     },
     {
-      title: "Active Bookings",
-      value: "3",
-      color: "text-blue-600",
+      title: "Wallet Balance",
+      value: `KES ${walletBalance}`,
+      color: "text-[#1A5F7A]",
     },
     {
-      title: "Wallet Balance",
-      value: "KES 2,500",
-      color: "text-[#1A5F7A]",
+      title: "System Status",
+      value: "Online",
+      color: "text-blue-600",
     },
   ];
 

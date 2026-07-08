@@ -1,27 +1,20 @@
 import { Link } from "react-router-dom";
 import {
   CarFront,
-  CalendarDays,
   Wallet,
   User,
 } from "lucide-react";
 
 const actions = [
   {
-    title: "Find Parking",
-    description: "Browse available parking slots.",
+    title: "Parking Slots",
+    description: "View available parking slots.",
     icon: CarFront,
     path: "/slots",
   },
   {
-    title: "My Bookings",
-    description: "View your reservations.",
-    icon: CalendarDays,
-    path: "/bookings",
-  },
-  {
     title: "Wallet",
-    description: "Check your balance.",
+    description: "View your wallet balance.",
     icon: Wallet,
     path: "/wallet",
   },
@@ -40,7 +33,7 @@ export default function QuickActions() {
         Quick Actions
       </h2>
 
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {actions.map((action) => {
           const Icon = action.icon;
 
