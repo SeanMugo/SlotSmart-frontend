@@ -1,9 +1,4 @@
-import { useState } from "react";
-import toast from "react-hot-toast";
-
 import useParking from "../hooks/useParking";
-import BookingModal from "../components/booking/BookingModal";
-import { createBooking } from "../services/bookingService";
 
 function getStatusStyle(status) {
   switch (status) {
@@ -27,72 +22,38 @@ function getStatusStyle(status) {
 export default function Parking() {
   const { slots, loading } = useParking();
 
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [bookingOpen, setBookingOpen] = useState(false);
-  const [bookingLoading, setBookingLoading] = useState(false);
-
-  const handleBooking = async (data) => {
-    try {
-      setBookingLoading(true);
-
-      await createBooking({
-        slot_id: selectedSlot.id,
-        vehicle_number: data.vehicle_number,
-        start_time: data.start_time,
-        end_time: data.end_time,
-      });
-
-      toast.success("Booking created successfully!");
-
-      setBookingOpen(false);
-      setSelectedSlot(null);
-
-    } catch (error) {
-      console.error(error.response?.data);
-
-      toast.error(
-        error.response?.data?.error ||
-          "Unable to create booking."
-      );
-    } finally {
-      setBookingLoading(false);
-    }
-  };
-
   if (loading) {
     return (
-      <p className="text-slate-500">
-        Loading parking slots...
-      </p>
+      <div className="flex h-40 items-center justify-center">
+        <p className="text-slate-500 text-lg">
+          Loading parking slots...
+        </p>
+      </div>
     );
   }
 
   return (
-    <>
-      <div>
-        <h1 className="mb-2 text-3xl font-bold text-slate-800">
-          Parking Slots
-        </h1>
+    <div>
+      <h1 className="mb-2 text-3xl font-bold text-slate-800">
+        Parking Availability
+      </h1>
 
-        <p className="mb-8 text-slate-500">
-          Choose an available parking slot.
-        </p>
+      <p className="mb-8 text-slate-500">
+        View the current status of all parking slots.
+      </p>
 
+      {slots.length === 0 ? (
+        <div className="rounded-xl bg-white p-8 text-center shadow">
+          <p className="text-slate-500">
+            No parking slots found.
+          </p>
+        </div>
+      ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {slots.map((slot) => (
             <div
               key={slot.id}
-              onClick={() => {
-                if (slot.is_available) {
-                  setSelectedSlot(slot);
-                  setBookingOpen(true);
-                }
-              }}
-              className={`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md ${
-                slot.is_available
-                  ? "cursor-pointer"
-                  : "cursor-not-allowed opacity-70"
-              }`}
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold">
@@ -118,7 +79,7 @@ export default function Parking() {
                 </p>
 
                 <p>
-                  <strong>Vehicle:</strong> {slot.slot_type}
+                  <strong>Vehicle Type:</strong> {slot.slot_type}
                 </p>
 
                 <p>
@@ -131,21 +92,17 @@ export default function Parking() {
                   </p>
                 )}
               </div>
+
+              {/* Future Feature */}
+              {/*
+              Version 2:
+              Drivers will be able to select a preferred slot.
+              Gate Staff will confirm or reassign it during check-in.
+              */}
             </div>
           ))}
         </div>
-      </div>
-
-      <BookingModal
-        slot={selectedSlot}
-        isOpen={bookingOpen}
-        onClose={() => {
-          setBookingOpen(false);
-          setSelectedSlot(null);
-        }}
-        onSubmit={handleBooking}
-        loading={bookingLoading}
-      />
-    </>
+      )}
+    </div>
   );
 }

@@ -7,6 +7,7 @@ import Parking from "./pages/Parking";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import AppLayout from "./components/layout/AppLayout";
+import RoleProtectedRoute from "./components/common/RoleProtectedRoute";
 
 function App() {
   return (
