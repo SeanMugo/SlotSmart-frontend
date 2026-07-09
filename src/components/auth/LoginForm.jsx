@@ -34,7 +34,13 @@ export default function LoginForm() {
 
       toast.success("Welcome back!");
 
-      navigate("/dashboard");
+      if (response.user?.role === "admin") {
+        navigate("/admin");
+      } else if (response.user?.role === "gate_staff") {
+        navigate("/gate");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error(error);
 

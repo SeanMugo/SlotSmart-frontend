@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   ParkingSquare,
@@ -6,37 +6,45 @@ import {
   Wallet,
   User,
   LogOut,
+  LogIn,
+  Users,
 } from "lucide-react";
 
-const links = [
-  {
-    name: "Dashboard",
-    path: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Book Slot",
-    path: "/book-slot",
-    icon: ParkingSquare,
-  },
-  {
-    name: "My Bookings",
-    path: "/bookings",
-    icon: ClipboardList,
-  },
-  {
-    name: "Wallet",
-    path: "/wallet",
-    icon: Wallet,
-  },
-  {
-    name: "Profile",
-    path: "/profile",
-    icon: User,
-  },
-];
+import useAuth from "../../hooks/useAuth";
+
+const linksByRole = {
+  driver: [
+    { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { name: "Book Slot", path: "/book-slot", icon: ParkingSquare },
+    { name: "My Bookings", path: "/bookings", icon: ClipboardList },
+    { name: "Wallet", path: "/wallet", icon: Wallet },
+    { name: "Profile", path: "/profile", icon: User },
+  ],
+  gate_staff: [
+    { name: "Gate Dashboard", path: "/gate", icon: LogIn },
+    { name: "Parking Slots", path: "/slots", icon: ParkingSquare },
+    { name: "Profile", path: "/profile", icon: User },
+  ],
+  admin: [
+    { name: "Admin Dashboard", path: "/admin", icon: LayoutDashboard },
+    { name: "Gate Dashboard", path: "/gate", icon: LogIn },
+    { name: "Parking Slots", path: "/slots", icon: ParkingSquare },
+    { name: "Users", path: "/admin", icon: Users },
+    { name: "Profile", path: "/profile", icon: User },
+  ],
+};
 
 export default function Sidebar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const links = linksByRole[user?.role] || linksByRole.driver;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <aside
       style={{
@@ -65,7 +73,7 @@ export default function Sidebar() {
 
           return (
             <NavLink
-              key={link.path}
+              key={link.name}
               to={link.path}
               style={({ isActive }) => ({
                 display: "flex",
@@ -86,6 +94,7 @@ export default function Sidebar() {
       </nav>
 
       <button
+        onClick={handleLogout}
         style={{
           marginTop: "auto",
           background: "#F2A65A",
@@ -95,6 +104,9 @@ export default function Sidebar() {
           borderRadius: "10px",
           cursor: "pointer",
           fontWeight: "600",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <LogOut size={18} style={{ marginRight: 8 }} />

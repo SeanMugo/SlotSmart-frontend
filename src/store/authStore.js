@@ -1,14 +1,26 @@
 import { create } from "zustand";
 
 const useAuthStore = create((set) => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+
   accessToken: localStorage.getItem("accessToken"),
+
   refreshToken: localStorage.getItem("refreshToken"),
+
   isAuthenticated: !!localStorage.getItem("accessToken"),
 
   login: (user, accessToken, refreshToken) => {
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    localStorage.setItem(
+      "accessToken",
+      accessToken
+    );
+
+    localStorage.setItem(
+      "refreshToken",
+      refreshToken
+    );
 
     set({
       user,
@@ -19,8 +31,15 @@ const useAuthStore = create((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+
+    localStorage.removeItem(
+      "accessToken"
+    );
+
+    localStorage.removeItem(
+      "refreshToken"
+    );
 
     set({
       user: null,
@@ -28,6 +47,15 @@ const useAuthStore = create((set) => ({
       refreshToken: null,
       isAuthenticated: false,
     });
+  },
+
+  setUser: (user) => {
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+
+    set({ user });
   },
 }));
 
