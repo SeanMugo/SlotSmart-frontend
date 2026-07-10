@@ -24,10 +24,7 @@ export default function Topbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="rounded-lg p-2 transition hover:bg-slate-100">
-          <Bell size={20} />
-        </button>
-
+    
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-600 font-semibold text-white">
             {initial}
