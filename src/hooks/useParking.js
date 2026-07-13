@@ -5,8 +5,9 @@ export default function useParking() {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchSlots = async () => {
+  async function refreshSlots() {
     try {
+      setLoading(true);
       const data = await getParkingSlots();
       setSlots(data);
     } catch (error) {
@@ -14,15 +15,15 @@ export default function useParking() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
-    fetchSlots();
+    refreshSlots();
   }, []);
 
   return {
     slots,
     loading,
-    refreshSlots: fetchSlots,
+    refreshSlots,
   };
 }
