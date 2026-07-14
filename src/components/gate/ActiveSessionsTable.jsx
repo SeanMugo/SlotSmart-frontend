@@ -132,31 +132,13 @@ export default function ActiveSessionsTable({ refreshKey }) {
             <table className="w-full text-left text-sm">
 
               <thead>
-
                 <tr className="border-b border-slate-200 text-slate-500">
-
-                  <th className="pb-3 pr-4 font-medium">
-                    Plate
-                  </th>
-
-                  <th className="pb-3 pr-4 font-medium">
-                    Driver
-                  </th>
-
-                  <th className="pb-3 pr-4 font-medium">
-                    Slot
-                  </th>
-
-                  <th className="pb-3 pr-4 font-medium">
-                    Checked In
-                  </th>
-
-                  <th className="pb-3 text-right font-medium">
-                    Action
-                  </th>
-
+                  <th className="pb-3 pr-4 font-medium">Plate</th>
+                  <th className="pb-3 pr-4 font-medium">Driver</th>
+                  <th className="pb-3 pr-4 font-medium">Slot</th>
+                  <th className="pb-3 pr-4 font-medium">Checked In</th>
+                  <th className="pb-3 text-right font-medium">Action</th>
                 </tr>
-
               </thead>
 
               <tbody>
@@ -230,6 +212,7 @@ export default function ActiveSessionsTable({ refreshKey }) {
 
       <PhoneNumberModal
         isOpen={phoneModalOpen}
+        session={selectedSession}
         loading={checkingOutId !== null}
         onClose={() => {
           setPhoneModalOpen(false);
@@ -237,6 +220,7 @@ export default function ActiveSessionsTable({ refreshKey }) {
         }}
         onConfirm={handleCheckOut}
       />
+
     </>
   );
 }

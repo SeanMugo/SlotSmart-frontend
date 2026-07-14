@@ -3,13 +3,10 @@ import toast from "react-hot-toast";
 import { RefreshCw } from "lucide-react";
 
 import { getActiveSession } from "../../services/parkingService";
-import { initiateSTKPush } from "../../services/mpesaService";
 
 export default function ActiveSessionCard() {
   const [session, setSession] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(true);
-  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     loadSession();
@@ -40,51 +37,6 @@ export default function ActiveSessionCard() {
       setSession(null);
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function handlePayment() {
-    if (!phoneNumber.trim()) {
-      toast.error("Please enter your M-Pesa phone number.");
-      return;
-    }
-
-    let formattedPhone = phoneNumber.trim().replace(/\s+/g, "");
-
-    if (formattedPhone.startsWith("+254")) {
-      formattedPhone = formattedPhone.substring(1);
-    }
-
-    if (formattedPhone.startsWith("07")) {
-      formattedPhone = "254" + formattedPhone.substring(1);
-    }
-
-    try {
-      setPaying(true);
-
-      await initiateSTKPush({
-        phone_number: formattedPhone,
-        amount: session.mpesa_amount,
-        parking_session_id: session.id,
-      });
-
-      toast.success(
-        "M-Pesa prompt sent. Complete the payment on your phone to finish checking out.",
-        {
-          duration: 5000,
-        }
-      );
-
-      await loadSession();
-    } catch (err) {
-      console.error(err);
-
-      toast.error(
-        err.response?.data?.error ||
-          "Failed to send STK Push."
-      );
-    } finally {
-      setPaying(false);
     }
   }
 
@@ -162,7 +114,7 @@ export default function ActiveSessionCard() {
             {session.payment_status === "active"
               ? "Parking Active"
               : session.payment_status === "pending"
-              ? "Payment Required"
+              ? "Awaiting Payment"
               : "Paid"}
           </p>
         </div>
@@ -197,42 +149,16 @@ export default function ActiveSessionCard() {
       )}
 
       {session.payment_status === "pending" && (
-        <div className="mt-8">
+        <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
 
-          <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <h3 className="font-semibold text-amber-700">
+            📲 Payment Request Sent
+          </h3>
 
-            <h3 className="text-lg font-semibold text-amber-700">
-              Payment Required
-            </h3>
-
-            <p className="mt-2 text-sm text-amber-700">
-              Your vehicle has been checked out successfully.
-              Please complete payment below to finalize your parking session.
-            </p>
-
-          </div>
-
-          <label className="mb-2 block font-medium">
-            M-Pesa Phone Number
-          </label>
-
-          <input
-            type="tel"
-            placeholder="07XXXXXXXX"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="mb-4 w-full rounded-xl border border-slate-300 p-3"
-          />
-
-          <button
-            onClick={handlePayment}
-            disabled={paying}
-            className="rounded-xl bg-[#1A5F7A] px-6 py-3 font-semibold text-white transition hover:bg-[#144b61] disabled:opacity-50"
-          >
-            {paying
-              ? "Sending STK Push..."
-              : "Pay with M-Pesa"}
-          </button>
+          <p className="mt-2 text-sm text-amber-700">
+            Gate Staff has sent an M-Pesa payment request to your phone.
+            Please approve the STK Push to complete your parking payment.
+          </p>
 
         </div>
       )}

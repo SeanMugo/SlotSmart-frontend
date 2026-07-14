@@ -2,11 +2,22 @@ import { useEffect, useState } from "react";
 
 export default function PhoneNumberModal({
   isOpen,
+  session,
   loading,
   onClose,
   onConfirm,
 }) {
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const formatted = phoneNumber.replace(/\s+/g, "");
+
+if (!/^2547\d{8}$/.test(formatted)) {
+  return toast.error(
+    "Enter a valid phone number (2547XXXXXXXX)."
+  );
+}
+
+onConfirm(formatted);
 
   useEffect(() => {
     if (isOpen) {
@@ -34,7 +45,10 @@ export default function PhoneNumberModal({
         </h2>
 
         <p className="mt-2 text-sm text-slate-500">
-          Enter the driver's M-Pesa phone number to send the payment request.
+          Enter the M-Pesa phone number for{" "}
+          <span className="font-semibold">
+            {session?.user_details?.username}
+          </span>.
         </p>
 
         <form
@@ -43,6 +57,7 @@ export default function PhoneNumberModal({
         >
 
           <input
+            autoFocus
             type="tel"
             placeholder="254712345678"
             value={phoneNumber}

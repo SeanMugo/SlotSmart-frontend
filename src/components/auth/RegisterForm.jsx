@@ -34,6 +34,8 @@ export default function RegisterForm() {
 
         e.preventDefault();
 
+        console.log("Submitting registration...");
+
         if (!formData.full_name.trim()) {
             return toast.error("Full name is required.");
         }
@@ -66,7 +68,7 @@ export default function RegisterForm() {
 
             const last_name = names.join(" ");
 
-            await authService.register({
+            await registerUser({
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
@@ -202,7 +204,8 @@ export default function RegisterForm() {
 
             </div>
 
-            <button
+            <button 
+                type="submit"
                 disabled={loading}
                 className="w-full rounded-xl bg-[#1A5F7A] py-3 text-white"
             >
