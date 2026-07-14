@@ -1,93 +1,84 @@
 import api from "../api/axios";
 
-// =========================
-// PARKING SLOTS
-// =========================
+/* ===========================
+   Parking Slots
+=========================== */
 
-export const getParkingSlots = async () => {
-  const response = await api.get("/slots/");
-  return response.data;
-};
+export async function getParkingSlots() {
+  const { data } = await api.get("/slots/");
+  return data;
+}
 
-export const createParkingSlot = async (data) => {
-  const response = await api.post(
-    "/slots/",
-    data
-  );
+export async function createParkingSlot(slot) {
+  const { data } = await api.post("/slots/", slot);
+  return data;
+}
 
-  return response.data;
-};
+export async function updateParkingSlot(id, slot) {
+  const { data } = await api.patch(`/slots/${id}/`, slot);
+  return data;
+}
 
-export const updateParkingSlot = async (
-  slotId,
-  data
-) => {
-  const response = await api.patch(
-    `/slots/${slotId}/`,
-    data
-  );
+export async function deleteParkingSlot(id) {
+  const { data } = await api.delete(`/slots/${id}/`);
+  return data;
+}
 
-  return response.data;
-};
+/* ===========================
+   Parking Sessions
+=========================== */
 
-export const deleteParkingSlot = async (
-  slotId
-) => {
-  const response = await api.delete(
-    `/slots/${slotId}/`
-  );
+export async function getParkingSessions() {
+  const { data } = await api.get("/sessions/");
+  return data;
+}
 
-  return response.data;
-};
+export async function getActiveSession() {
+  const { data } = await api.get("/sessions/active/");
+  return data;
+}
 
-// =========================
-// PARKING SESSIONS
-// =========================
+export async function getSessionHistory() {
+  const { data } = await api.get("/sessions/history/");
+  return data;
+}
 
-export const getParkingSessions = async () => {
-  const response = await api.get("/sessions/");
-  return response.data;
-};
-
-export const getActiveSession = async () => {
-  const response = await api.get(
-    "/sessions/active/"
-  );
-
-  return response.data;
-};
-
-export const getSessionHistory = async () => {
-  const response = await api.get(
-    "/sessions/history/"
-  );
-
-  return response.data;
-};
-
-// =========================
-// CHECK IN
-// =========================
-
-export const checkIn = async (data) => {
-  const response = await api.post(
+export async function checkIn(payload) {
+  const { data } = await api.post(
     "/sessions/check_in/",
-    data
+    payload
   );
 
-  return response.data;
-};
+  return data;
+}
 
 // =========================
 // CHECK OUT
 // =========================
 
 export const checkOut = async (
-  sessionId
+  sessionId,
+  phoneNumber
 ) => {
   const response = await api.post(
-    `/sessions/${sessionId}/check_out/`
+    `/sessions/${sessionId}/check_out/`,
+    {
+      phone_number: phoneNumber,
+    }
   );
 
   return response.data;
 };
+
+/* ===========================
+   M-Pesa
+=========================== */
+
+export async function sendMpesaSTKPush(payload) {
+  const { data } = await api.post(
+    "/mpesa/stk-push/",
+    payload
+  );
+
+  return data;
+}
