@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function PhoneNumberModal({
   isOpen,
@@ -8,16 +9,6 @@ export default function PhoneNumberModal({
   onConfirm,
 }) {
   const [phoneNumber, setPhoneNumber] = useState("");
-
-  const formatted = phoneNumber.replace(/\s+/g, "");
-
-if (!/^2547\d{8}$/.test(formatted)) {
-  return toast.error(
-    "Enter a valid phone number (2547XXXXXXXX)."
-  );
-}
-
-onConfirm(formatted);
 
   useEffect(() => {
     if (isOpen) {
@@ -30,9 +21,16 @@ onConfirm(formatted);
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (!phoneNumber.trim()) return;
+    const formatted = phoneNumber.replace(/\s+/g, "");
 
-    onConfirm(phoneNumber.trim());
+    if (!/^2547\d{8}$/.test(formatted)) {
+      toast.error(
+        "Enter a valid phone number (2547XXXXXXXX)."
+      );
+      return;
+    }
+
+    onConfirm(formatted);
   }
 
   return (

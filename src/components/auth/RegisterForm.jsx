@@ -19,22 +19,20 @@ export default function RegisterForm() {
         confirm_password: "",
     });
 
-    const handleChange = (e) => {
+    function handleChange(e) {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
-    };
+    }
 
-    const validatePhone = (phone) => {
+    function validatePhone(phone) {
         return /^(07\d{8}|01\d{8}|\+2547\d{8}|\+2541\d{8})$/.test(phone);
-    };
+    }
 
-    const handleSubmit = async (e) => {
+    async function handleSubmit(e) {
 
         e.preventDefault();
-
-        console.log("Submitting registration...");
 
         if (!formData.full_name.trim()) {
             return toast.error("Full name is required.");
@@ -51,10 +49,15 @@ export default function RegisterForm() {
         }
 
         if (formData.password.length < 6) {
-            return toast.error("Password must be at least 6 characters.");
+            return toast.error(
+                "Password must be at least 6 characters."
+            );
         }
 
-        if (formData.password !== formData.confirm_password) {
+        if (
+            formData.password !==
+            formData.confirm_password
+        ) {
             return toast.error("Passwords do not match.");
         }
 
@@ -62,9 +65,11 @@ export default function RegisterForm() {
 
             setLoading(true);
 
-            const names = formData.full_name.trim().split(" ");
+            const names = formData.full_name
+                .trim()
+                .split(" ");
 
-            const first_name = names.shift();
+            const first_name = names.shift() || "";
 
             const last_name = names.join(" ");
 
@@ -78,7 +83,9 @@ export default function RegisterForm() {
                 phone_number: formData.phone_number,
             });
 
-            toast.success("Registration successful!");
+            toast.success(
+                "Registration successful!"
+            );
 
             setFormData({
                 full_name: "",
@@ -89,7 +96,9 @@ export default function RegisterForm() {
                 confirm_password: "",
             });
 
-            setTimeout(() => navigate("/"), 1500);
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
 
         } catch (err) {
 
@@ -103,11 +112,12 @@ export default function RegisterForm() {
             setLoading(false);
 
         }
-    };
+    }
 
     return (
         <form
             onSubmit={handleSubmit}
+            autoComplete="off"
             className="space-y-5"
         >
 
@@ -121,6 +131,7 @@ export default function RegisterForm() {
                     name="full_name"
                     value={formData.full_name}
                     onChange={handleChange}
+                    autoComplete="off"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
@@ -136,6 +147,7 @@ export default function RegisterForm() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    autoComplete="off"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
@@ -152,6 +164,7 @@ export default function RegisterForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    autoComplete="off"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
@@ -168,6 +181,7 @@ export default function RegisterForm() {
                     value={formData.phone_number}
                     onChange={handleChange}
                     placeholder="0712345678"
+                    autoComplete="off"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
@@ -184,6 +198,7 @@ export default function RegisterForm() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="new-password"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
@@ -200,17 +215,20 @@ export default function RegisterForm() {
                     name="confirm_password"
                     value={formData.confirm_password}
                     onChange={handleChange}
+                    autoComplete="new-password"
                     className="w-full rounded-xl border px-4 py-3"
                 />
 
             </div>
 
-            <button 
+            <button
                 type="submit"
                 disabled={loading}
                 className="w-full rounded-xl bg-[#1A5F7A] py-3 text-white"
             >
-                {loading ? "Creating..." : "Create Account"}
+                {loading
+                    ? "Creating..."
+                    : "Create Account"}
             </button>
 
             <p className="text-center text-sm">
@@ -228,5 +246,4 @@ export default function RegisterForm() {
 
         </form>
     );
-
 }
